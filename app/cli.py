@@ -120,7 +120,7 @@ def main() -> None:
             response = run_turn(graph, user_input, session_thread_id)
             print(f"\nAssistant > {response}\n")
 
-        except (KeyboardInterrupt, EOFError):
+        except KeyboardInterrupt, EOFError:
             print("\nSession interrupted. Goodbye!")
             break
 

@@ -119,15 +119,19 @@ def main() -> None:
     args = parser.parse_args()
 
     # Verify API key is available
-    if not os.environ.get("OPENAI_API_KEY") and not os.environ.get("ANTHROPIC_API_KEY"):
+    if (
+        not os.environ.get("OPENAI_API_KEY")
+        and not os.environ.get("GOOGLE_API_KEY")
+        and not os.environ.get("GEMINI_API_KEY")
+    ):
         print("=" * 60, file=sys.stderr)
         print(" [!] Missing API Credentials for Live Evaluation", file=sys.stderr)
         print("=" * 60, file=sys.stderr)
         print(
             "The evaluation harness tests real multi-tool trajectories with an LLM.\n"
-            "Please configure OPENAI_API_KEY in your .env file or environment:\n\n"
+            "Please configure OPENAI_API_KEY or GOOGLE_API_KEY in your .env file:\n\n"
             "    cp .env.example .env\n"
-            "    # Edit .env and set OPENAI_API_KEY\n"
+            "    # Edit .env and set OPENAI_API_KEY or GOOGLE_API_KEY\n"
             "    uv run python -m evals.run\n",
             file=sys.stderr,
         )
