@@ -18,3 +18,4 @@ wheels/
 # Runtime & evaluation logs
 logs/
 *.log
+/Technical_Execution_Plan-Clinic_Operations_Assistant.md
