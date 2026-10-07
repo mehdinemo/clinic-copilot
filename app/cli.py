@@ -14,6 +14,10 @@ from langgraph.graph.state import CompiledStateGraph
 from app import clock
 from app.agent.graph import build_graph
 from app.db.database import init_and_seed_db
+from app.logging_config import setup_logging
+
+# Configure logging early to suppress third-party import warnings from the terminal
+setup_logging()
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +79,7 @@ def run_turn(
 def main() -> None:
     """Initialize resources and run the interactive CLI REPL."""
     load_dotenv()
+    setup_logging()
     print("==================================================")
     print("   Clinic Operations Assistant - Vertical Slice   ")
     print("==================================================")

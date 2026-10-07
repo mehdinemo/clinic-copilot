@@ -115,6 +115,13 @@ Exiting Clinic Operations Assistant. Goodbye!
 - Tool arguments, including patient names, are logged. The data here is synthetic.
 - `InMemoryTraceCollector` subclasses `JsonLogCallback` for offline integration tests and the live evaluation harness.
 
+### Application & diagnostic logging
+
+Application execution logs and third-party diagnostics are managed by `app/logging_config.py`:
+- **Console output:** Restricted to `ERROR` and `CRITICAL` levels, keeping the terminal uncluttered during interactive CLI sessions.
+- **File output:** A rotating file handler captures all logs (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`) into `logs/assistant.log` (5 MB per file, 3 backups retained).
+- **Warnings routing:** Standard library warnings (`warnings.warn`) and third-party warnings (e.g., LangChain, httpx, Google GenAI deprecations) are automatically routed to `py.warnings` and written to `logs/assistant.log`.
+
 ## Evaluation
 
 `uv run python -m evals.run --runs N` runs scripted operational scenarios against a real model and reports pass rates per scenario over N iterations.
@@ -154,13 +161,14 @@ Environment variables configured via `.env` (copy from `.env.example`):
 app/
 ├── clock.py            # fixed demo clock, CLINIC_TZ, ISO/naive conversions
 ├── cli.py              # interactive REPL and run_turn()
+├── logging_config.py   # dual-output logging, console suppression & rotating file handler
 ├── observability.py    # JsonLogCallback, InMemoryTraceCollector
 ├── agent/              # graph.py, llm.py (dynamic provider & proxy routing), prompts.py
 ├── domain/             # models.py, errors.py, services.py (rules, process lock)
 ├── tools/              # schemas.py, errors.py, timeout.py, appointments.py, availability.py
 └── db/                 # database.py (StaticPool, auto-seed), seed.py
 tests/
-├── unit/               # test_services.py, test_tools.py, test_llm.py
+├── unit/               # test_services.py, test_tools.py, test_llm.py, test_logging.py
 ├── integration/        # test_graph.py
 ├── conftest.py
 └── fakes.py            # scripted fake chat model
@@ -175,6 +183,7 @@ README.md
 
 `uv run pytest` runs completely offline, with no network and no API key required.
 
+- **Logging unit tests (`tests/unit/test_logging.py`):** Console level restriction (suppressing INFO/WARNING), file capture across all levels, standard library warning routing, rotating file handler limits (5MB, 3 backups), and `.gitignore` verification.
 - **LLM unit tests (`tests/unit/test_llm.py`):** Provider spec normalization, credential-based fallback resolution, HTTP/SOCKS5 proxy environment injection, and model client proxy configuration.
 - **Service unit tests (`tests/unit/test_services.py`):** Interval boundaries (adjacent slots pass, overlaps conflict), self-exclusion, cancelled appointments ignored, different therapists, working hours, past time, not found, invalid state.
 - **Tool unit tests (`tests/unit/test_tools.py`):** Success and failure paths for each tool (invalid ISO input, not found, slot conflict, past time, outside hours, invalid state), the error-payload contract, timeout mapping, and the timeout helper.

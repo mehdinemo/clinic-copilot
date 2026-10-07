@@ -16,11 +16,13 @@ from app import clock
 from app.agent.graph import build_graph
 from app.cli import run_turn
 from app.db.database import init_and_seed_db
+from app.logging_config import setup_logging
 from app.observability import InMemoryTraceCollector
 from evals.checks import check_groundedness, check_phrases, check_trajectory
 from evals.scenarios import SCENARIOS, EvalScenario
 
 load_dotenv()
+setup_logging()
 
 
 def run_scenario(scenario: EvalScenario) -> bool:
