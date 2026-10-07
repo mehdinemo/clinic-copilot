@@ -5,19 +5,14 @@ import sys
 import uuid
 from typing import Any, Dict, List, Optional
 
+from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langgraph.errors import GraphRecursionError
 from langgraph.graph.state import CompiledStateGraph
 
 from app import clock
 from app.agent.graph import build_graph
-from app.db.database import (
-    get_engine,
-    get_session_factory,
-    init_db,
-    set_default_session_factory,
-)
-from app.db.seed import seed_database
+from app.db.database import init_and_seed_db
 
 logger = logging.getLogger(__name__)
 
@@ -78,21 +73,15 @@ def run_turn(
 
 def main() -> None:
     """Initialize resources and run the interactive CLI REPL."""
+    load_dotenv()
     print("==================================================")
     print("   Clinic Operations Assistant - Vertical Slice   ")
     print("==================================================")
 
-    # 1. Initialize in-memory SQLite database and set default session factory
-    engine = get_engine("sqlite:///:memory:")
-    init_db(engine)
-    session_factory = get_session_factory(engine)
-    set_default_session_factory(session_factory)
+    # 1. Initialize in-memory SQLite database, create schema, and seed deterministically
+    init_and_seed_db()
 
-    # 2. Seed database deterministically
-    with session_factory() as session:
-        seed_database(session)
-
-    # 3. Build graph
+    # 2. Build graph
     try:
         graph = build_graph()
     except Exception as exc:
@@ -100,7 +89,7 @@ def main() -> None:
         print("Please verify that your LLM_MODEL and provider API keys are configured in .env.")
         return
 
-    # 4. Session thread
+    # 3. Session thread
     session_thread_id = uuid.uuid4().hex
     current_time_str = clock.now().strftime("%Y-%m-%d %A %H:%M")
     print(f"Clinic Clock: {current_time_str} ({clock.CLINIC_TZ})")

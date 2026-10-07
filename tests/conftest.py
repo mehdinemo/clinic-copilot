@@ -10,10 +10,10 @@ from app import clock
 from app.db.database import (
     get_engine,
     get_session_factory,
+    init_and_seed_db,
     init_db,
     set_default_session_factory,
 )
-from app.db.seed import seed_database
 from app.domain.models import Therapist
 
 
@@ -23,6 +23,13 @@ def reset_clinic_clock() -> Generator[None, None, None]:
     clock.reset_now()
     yield
     clock.reset_now()
+
+
+@pytest.fixture(autouse=True)
+def reset_db_session_factory() -> Generator[None, None, None]:
+    """Ensure database default session factory is reset between tests."""
+    yield
+    set_default_session_factory(None)
 
 
 @pytest.fixture
@@ -60,11 +67,6 @@ def clean_session() -> Generator[Session, None, None]:
 @pytest.fixture
 def seeded_session() -> Generator[Session, None, None]:
     """Provide an in-memory database seeded with the deterministic seed dataset."""
-    engine = get_engine("sqlite:///:memory:")
-    init_db(engine)
-    session_factory = get_session_factory(engine)
-    set_default_session_factory(session_factory)
-
+    session_factory = init_and_seed_db()
     with session_factory() as session:
-        seed_database(session)
         yield session

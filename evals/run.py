@@ -15,13 +15,7 @@ from dotenv import load_dotenv
 from app import clock
 from app.agent.graph import build_graph
 from app.cli import run_turn
-from app.db.database import (
-    get_engine,
-    get_session_factory,
-    init_db,
-    set_default_session_factory,
-)
-from app.db.seed import seed_database
+from app.db.database import init_and_seed_db
 from app.observability import InMemoryTraceCollector
 from evals.checks import check_groundedness, check_phrases, check_trajectory
 from evals.scenarios import SCENARIOS, EvalScenario
@@ -38,13 +32,7 @@ def run_scenario(scenario: EvalScenario) -> bool:
     clock.reset_now()
 
     # 2. Fresh in-memory seeded DB per scenario
-    engine = get_engine("sqlite:///:memory:")
-    init_db(engine)
-    session_factory = get_session_factory(engine)
-    set_default_session_factory(session_factory)
-
-    with session_factory() as session:
-        seed_database(session)
+    init_and_seed_db()
 
     # 3. Build live graph
     graph = build_graph()
