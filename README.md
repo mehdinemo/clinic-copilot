@@ -21,9 +21,10 @@ Run a single evaluation scenario:
 uv run python -m evals.run --scenario dependent_chain_reschedule
 ```
 
-Lint and format check:
+Lint, format, and static type check:
 ```bash
 uv run ruff check . && uv run ruff format --check .
+uv run mypy
 ```
 
 ## Tools
@@ -180,6 +181,16 @@ README.md
 - **Graph integration tests (`tests/integration/test_graph.py`, scripted fake model):** Parallel tool calls, same-slot race (one success, one `SLOT_UNAVAILABLE`), multi-turn memory per `thread_id`, recursion-limit guard, and the logging callback.
 
 These tests verify wiring, proxy routing, and rules, not model behavior; model behavior is what the live eval measures.
+
+### Linting and type checking
+
+Static analysis, code formatting, and type safety checks are configured across `app/`, `tests/`, and `evals/`:
+```bash
+uv run ruff check . && uv run ruff format --check .
+uv run mypy
+```
+- **Ruff:** Enforces code style, import sorting, and formatting rules (`pyproject.toml`).
+- **Mypy:** Enforces static type checking across the project (`pyproject.toml`).
 
 ## Known limitations
 

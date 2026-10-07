@@ -122,7 +122,7 @@ def test_same_slot_race_condition(seeded_session: Session) -> None:
         content = tm.content
         if isinstance(content, str):
             payloads.append(json.loads(content))
-        else:
+        elif isinstance(content, dict):
             payloads.append(content)
 
     statuses = [p.get("status") for p in payloads]

@@ -147,6 +147,13 @@ You can verify the assistant's behavior using built-in offline test suites and l
   ```
   Runs all 4 operational scenarios across 3 iterations and outputs a pass-rate summary.
 
+* **Linting and Static Type Checking:**
+  ```bash
+  uv run ruff check .
+  uv run mypy
+  ```
+  Runs code formatting/linting checks with Ruff and static type analysis with Mypy.
+
 ---
 
 ## 4. Exiting the Application

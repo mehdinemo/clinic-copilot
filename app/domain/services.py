@@ -196,7 +196,7 @@ def reschedule(
         if new_start_naive < current_now_naive:
             raise PastTime(f"Requested start time {new_start_naive} cannot be in the past.")
 
-        therapist = appt.therapist
+        therapist: Optional[Therapist] = appt.therapist
         if not therapist:
             therapist = session.get(Therapist, appt.therapist_id)
             if not therapist:

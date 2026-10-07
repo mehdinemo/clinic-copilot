@@ -3,10 +3,11 @@
 import logging
 import sys
 import uuid
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
+from langchain_core.runnables import RunnableConfig
 from langgraph.errors import GraphRecursionError
 from langgraph.graph.state import CompiledStateGraph
 
@@ -40,7 +41,7 @@ def run_turn(
     callbacks: Optional[List[Any]] = None,
 ) -> str:
     """Execute a single conversation turn against the LangGraph agent without I/O side effects."""
-    config: Dict[str, Any] = {
+    config: RunnableConfig = {
         "configurable": {"thread_id": thread_id},
         "recursion_limit": recursion_limit,
     }

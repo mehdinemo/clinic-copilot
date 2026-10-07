@@ -1,6 +1,6 @@
 """Scripted fake chat model for offline integration testing."""
 
-from typing import Any, List
+from typing import Any, List, Optional
 
 from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
 from langchain_core.messages import BaseMessage
@@ -17,10 +17,22 @@ class ScriptedFakeChatModel(GenericFakeChatModel):
         """Mock tool binding by returning self."""
         return self
 
-    def _generate(self, messages: List[BaseMessage], **kwargs: Any) -> ChatResult:
+    def _generate(
+        self,
+        messages: List[BaseMessage],
+        stop: Optional[List[str]] = None,
+        run_manager: Any = None,
+        **kwargs: Any,
+    ) -> ChatResult:
         self.received_messages.append(list(messages))
-        return super()._generate(messages, **kwargs)
+        return super()._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
 
-    async def _agenerate(self, messages: List[BaseMessage], **kwargs: Any) -> ChatResult:
+    async def _agenerate(
+        self,
+        messages: List[BaseMessage],
+        stop: Optional[List[str]] = None,
+        run_manager: Any = None,
+        **kwargs: Any,
+    ) -> ChatResult:
         self.received_messages.append(list(messages))
-        return await super()._agenerate(messages, **kwargs)
+        return await super()._agenerate(messages, stop=stop, run_manager=run_manager, **kwargs)
