@@ -43,6 +43,13 @@ Open your terminal in the project folder and start the assistant:
 uv run python -m app.cli
 ```
 
+Alternatively, you can run the assistant containerized with Docker:
+
+```bash
+docker build -t clinic-copilot .
+docker run --rm -it --env-file .env clinic-copilot
+```
+
 You will see the startup banner displaying the fixed clinic demo clock, session thread ID, and the interactive prompt:
 
 ```text

@@ -1,0 +1,53 @@
+# Version control
+.git
+.gitignore
+
+# Virtual environment and dependencies
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+
+# Testing, typing, and linting
+tests/
+evals/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+
+# Logs and runtime data
+logs/
+*.log
+
+# IDE and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Docker files
+Dockerfile*
+.dockerignore
+
+# Non-runtime documentation
+DESIGN.md
+Technical_Execution_Plan-*.md
+UserGuide_*.md

@@ -43,6 +43,13 @@
 uv run python -m app.cli
 ```
 
+یا در صورت تمایل می‌توانید برنامه را در کانتینر داکر اجرا کنید:
+
+```bash
+docker build -t clinic-copilot .
+docker run --rm -it --env-file .env clinic-copilot
+```
+
 پس از اجرای این دستور، بنر آغازین به همراه ساعت نمایشی کلینیک، شناسه نشست و خط فرمان `Manager >` نمایش داده خواهد شد:
 
 ```text

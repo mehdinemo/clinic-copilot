@@ -20,11 +20,22 @@ Run a single evaluation scenario:
 ```bash
 uv run python -m evals.run --scenario dependent_chain_reschedule
 ```
-
 Lint, format, and static type check:
 ```bash
 uv run ruff check . && uv run ruff format --check .
 uv run mypy
+```
+
+### Docker
+
+Build and run the containerized assistant using Docker:
+
+```bash
+# Build the production image
+docker build -t clinic-copilot .
+
+# Run interactively with your configured environment variables
+docker run --rm -it --env-file .env clinic-copilot
 ```
 
 ## Tools
