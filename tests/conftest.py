@@ -15,6 +15,10 @@ from app.db.database import (
     set_default_session_factory,
 )
 from app.domain.models import Therapist
+from app.logging_config import setup_logging
+
+# Ensure logging configuration is active during pytest execution
+setup_logging()
 
 
 @pytest.fixture(autouse=True)
